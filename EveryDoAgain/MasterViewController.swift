@@ -52,6 +52,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             
             let context = self.fetchedResultsController.managedObjectContext
             let newTodo = ToDo(context: context)
+            newTodo.isCompleted = false
             
             if titleText.text == "" {
             newTodo.title = self.defaults.string(forKey: "title")
@@ -70,6 +71,8 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             } else {
                 newTodo.priorityNumber = Int32(self.defaults.string(forKey: "priorityNumber")!)!
             }
+            
+            
             
             // Save the context.
             do {
@@ -158,6 +161,13 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     func configureCell(_ cell: UITableViewCell, withToDo todo: ToDo) {
         cell.textLabel!.text = todo.title?.description
+        
+        if todo.isCompleted == false {
+        cell.textLabel?.textColor = UIColor.black
+        } else {
+        cell.textLabel?.textColor = UIColor.green
+        }
+        
     }
 
     // MARK: - Fetched results controller

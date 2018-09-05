@@ -13,6 +13,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var detailDescriptionLabel: UILabel!
     @IBOutlet weak var priorityLabel: UILabel!
     @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet weak var completeSwitch: UISwitch!
     
 
     func configureView() {
@@ -34,13 +35,17 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         configureView()
+        completeSwitch.isOn = (detailItem?.isCompleted)!
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    @IBAction func switchChanged(_ sender: UISwitch) {
+        if sender.isOn == true {
+            detailItem?.isCompleted = true
+        } else {
+            detailItem?.isCompleted = false
+        }
     }
-
+    
     var detailItem: ToDo? {
         didSet {
             // Update the view.
