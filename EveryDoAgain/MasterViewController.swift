@@ -13,6 +13,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
 
     var detailViewController: DetailViewController? = nil
     var managedObjectContext: NSManagedObjectContext? = nil
+    var defaults = UserDefaults.standard
 
 
     override func viewDidLoad() {
@@ -26,6 +27,7 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let controllers = split.viewControllers
             detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
         }
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -51,9 +53,23 @@ class MasterViewController: UITableViewController, NSFetchedResultsControllerDel
             let context = self.fetchedResultsController.managedObjectContext
             let newTodo = ToDo(context: context)
             
-            newTodo.title = titleText.text
+            if titleText.text == "" {
+            newTodo.title = self.defaults.string(forKey: "title")
+            } else {
+                newTodo.title = titleText.text
+            }
+            
+            if descriptionText.text == "" {
+            newTodo.todoDescription = self.defaults.string(forKey: "todoDescription")
+            } else {
             newTodo.todoDescription = descriptionText.text
-            newTodo.priorityNumber = Int32(priorityText.text!)!
+            }
+            
+            if let content: Int! = Int(priorityText.text!){
+            newTodo.priorityNumber = Int32(content)
+            } else {
+                newTodo.priorityNumber = Int32(self.defaults.string(forKey: "priorityNumber")!)!
+            }
             
             // Save the context.
             do {
